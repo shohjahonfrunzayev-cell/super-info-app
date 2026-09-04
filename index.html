@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Info App - Barcha Ma'lumotlar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+            animation: fadeIn 0.8s ease-in;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .search-container {
+            max-width: 600px;
+            margin: 20px auto;
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-box {
+            flex: 1;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .search-btn {
+            padding: 15px 30px;
+            background: #ff6b6b;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .search-btn:hover {
+            background: #ff5252;
+            transform: scale(1.05);
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .games-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            height: fit-content;
+        }
+
+        .games-section h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .games-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+
+        .game-item {
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+            text-align: left;
+        }
+
+        .game-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .game-item.active {
+            background: #ff6b6b;
+            box-shadow: 0 5px 15px rgba(255,107,107,0.4);
+        }
+
+        .content-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            color: #999;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        .videos-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .video-card {
+            background: #f5f5f5;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3em;
+        }
+
+        .video-info {
+            padding: 15px;
+        }
+
+        .video-info h3 {
+            color: #333;
+            margin-bottom: 5px;
+            font-size: 1.1em;
+        }
+
+        .video-info p {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .shorts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .short-card {
+            background: #f5f5f5;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        .short-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .short-thumbnail {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8787 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5em;
+        }
+
+        .short-info {
+            padding: 10px;
+        }
+
+        .short-info h4 {
+            color: #333;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .info-card {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border-left: 5px solid #667eea;
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .info-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .info-card p {
+            color: #666;
+            line-height: 1.6;
+            font-size: 0.95em;
+        }
+
+        .special-info {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+            font-size: 1.1em;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .videos-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .shorts-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🌟 Super Info App</h1>
+            <p>Barcha ma'lumotlarni qidirish va topish</p>
+        </header>
+
+        <div class="search-container">
+            <input type="text" class="search-box" id="searchInput" placeholder="Biror narsani qidiring...">
+            <button class="search-btn" onclick="searchContent()">🔍 Qidirish</button>
+        </div>
+
+        <div class="main-content">
+            <!-- Games Section -->
+            <div class="games-section">
+                <h2>🎮 O'yinlar</h2>
+                <div class="games-list" id="gamesList"></div>
+            </div>
+
+            <!-- Content Section -->
+            <div class="content-section">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('videos')">🎬 Videolar (2)</button>
+                    <button class="tab-btn" onclick="switchTab('shorts')">📱 Shorts (3)</button>
+                    <button class="tab-btn" onclick="switchTab('info')">ℹ️ Ma'lumotlar (25+)</button>
+                </div>
+
+                <!-- Videos Tab -->
+                <div id="videos" class="tab-content active">
+                    <div class="videos-grid" id="videosContainer"></div>
+                </div>
+
+                <!-- Shorts Tab -->
+                <div id="shorts" class="tab-content">
+                    <div class="shorts-grid" id="shortsContainer"></div>
+                </div>
+
+                <!-- Info Tab -->
+                <div id="info" class="tab-content">
+                    <div class="info-grid" id="infoContainer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Barcha O'yinlar
+        const games = [
+            { name: 'PUBG', icon: '🔫' },
+            { name: 'Minecraft', icon: '⛏️' },
+            { name: 'Roblox', icon: '🎮' },
+            { name: 'Brawl Stars', icon: '⭐' },
+            { name: 'Grand Theft Auto', icon: '🚗' },
+            { name: 'Mobile Legends', icon: '⚔️' },
+            { name: 'Clash Royale', icon: '👑' },
+            { name: 'Fortnite', icon: '🛡️' }
+        ];
+
+        // Videolar (2ta eng mashhur)
+        const videos = [
+            { 
+                id: 1,
+                title: 'PUBG Mobile Tips & Tricks',
+                emoji: '🎯',
+                duration: '14:32',
+                description: 'PUBG Mobile-da yutish uchun eng yaxshi strategiyalar',
+                views: '2.5M'
+            },
+            { 
+                id: 2,
+                title: 'Minecraft Creative Mode Tutorial',
+                emoji: '🏰',
+                duration: '22:15',
+                description: 'Minecraft-da ajoyib binolarni qanday qurishni o\'rganing',
+                views: '1.8M'
+            }
+        ];
+
+        // Shorts (3ta TikTok-1 daqiqalik)
+        const shorts = [
+            { 
+                id: 1,
+                title: 'PUBG Epic Moment',
+                emoji: '💥',
+                duration: '0:59'
+            },
+            { 
+                id: 2,
+                title: 'Minecraft Fail Compilation',
+                emoji: '😂',
+                duration: '0:45'
+            },
+            { 
+                id: 3,
+                title: 'Roblox Gaming Highlights',
+                emoji: '🌟',
+                duration: '0:52'
+            }
+        ];
+
+        // Barcha Ma'lumotlar (25+ turli narsalar)
+        const allInfo = {
+            'PUBG': [
+                {
+                    name: 'Kar98K Sniper',
+                    emoji: '🔫',
+                    location: 'Butun xarita bo\'ylab uchraydi',
+                    use: 'Uzaqdagi dushmanlarni vurish uchun',
+                    need: 'Sniper marksmanlik uchun kritik',
+                    rarity: 'OSON: Har bir baraka va uyda topiladi'
+                },
+                {
+                    name: 'Level 3 Armor',
+                    emoji: '🛡️',
+                    location: 'Uy va bunkerlarning ichida',
+                    use: 'To\'ppa damage-ni kamaytirish',
+                    need: 'Dushman o\'q-otkidan himoyalanish uchun',
+                    rarity: 'ODAM-QULAY: Eng yaxshi himoya'
+                },
+                {
+                    name: 'First Aid Kit',
+                    emoji: '🏥',
+                    location: 'Dori dukoni va uylar',
+                    use: 'Jismoniy kuch tiklash',
+                    need: 'O\'q-otkidan yaralangan paytda hol qilish',
+                    rarity: 'UMUMIY: Ko\'p joyda topiladi'
+                },
+                {
+                    name: 'Grenada',
+                    emoji: '💣',
+                    location: 'Voqea joylar (Buildings)',
+                    use: 'Dushmanlarni portlatish',
+                    need: 'Dushmanlarni o\'ronida turib olish',
+                    rarity: 'NOYOB: Kamdan-kam topiladi'
+                },
+                {
+                    name: 'Drops Signal',
+                    emoji: '📦',
+                    location: 'Langit ortasida tushadi',
+                    use: 'Eng yaxshi silahlar olish',
+                    need: 'O\'yin oxirida yutish uchun',
+                    rarity: 'JUDA NOYOB: Odam ko\'p tomon boradi'
+                }
+            ],
+            'Minecraft': [
+                {
+                    name: 'Diamond',
+                    emoji: '💎',
+                    location: 'Y 5-12 sathida (Deep Dark)',
+                    use: 'Eng yaxshi asboblar yaratish',
+                    need: 'Pickaxa va qura-qachog\'i uchun',
+                    rarity: 'JUDA NOYOB: Chuqurlarda topiladi'
+                },
+                {
+                    name: 'Redstone',
+                    emoji: '⚡',
+                    location: 'Y 0-16 sathida',
+                    use: 'Avtomatik tizimlarni qurish',
+                    need: 'Mehanik qurilmalar uchun',
+                    rarity: 'NOYOB: Chuqurlarda topiladi'
+                },
+                {
+                    name: 'Netherite',
+                    emoji: '🔥',
+                    location: 'Nether o\'lkasi Y 8-119',
+                    use: 'Eng kuchli asboblar',
+                    need: 'Eng qo\'y protected gear',
+                    rarity: 'JUDA JUDA NOYOB: Eng qiymat'
+                },
+                {
+                    name: 'Ender Pearl',
+                    emoji: '👁️',
+                    location: 'Nether - Endermanlarda',
+                    use: 'Teleport qilish',
+                    need: 'Stronghold topish uchun',
+                    rarity: 'NOYOB: Dushman tarafidan tushadi'
+                },
+                {
+                    name: 'Obsidian',
+                    emoji: '🖤',
+                    location: 'Suv va lava qo\'llanishida',
+                    use: 'Portal qurilishiga',
+                    need: 'Nether kirish uchun',
+                    rarity: 'UMUMIY: Oson topiladi'
+                }
+            ],
+            'Roblox': [
+                {
+                    name: 'Robux',
+                    emoji: '💰',
+                    location: 'O\'yin do\'koni',
+                    use: 'Virtual para o\'yinlarda',
+                    need: 'Premium itemlar sotib olish',
+                    rarity: 'XIS: Real pul bilan sotiladi'
+                },
+                {
+                    name: 'Game Pass',
+                    emoji: '🎫',
+                    location: 'Har o\'yinda',
+                    use: 'Qo\'shimcha imkoniyatlar',
+                    need: 'O\'yinda foydalanish',
+                    rarity: 'ODAM-QULAY: Kamroq pul'
+                },
+                {
+                    name: 'Limited Edition Skin',
+                    emoji: '👕',
+                    location: 'O\'yin katalogi',
+                    use: 'Avatar o\'zgarishi',
+                    need: 'Yangi tashqi ko\'rinish',
+                    rarity: 'NOYOB: Vaqt keyin qo\'lga kiradi'
+                },
+                {
+                    name: 'Developer Badge',
+                    emoji: '🏆',
+                    location: 'Profil (O\'yinni yaratuvchilar)',
+                    use: 'Nufuz ko\'rsatish',
+                    need: 'O\'yin yaratuvchining shuhrati',
+                    rarity: 'JUDA NOYOB: Developer uchun'
+                },
+                {
+                    name: 'Tix (Tikcet)',
+                    emoji: '🎟️',
+                    location: 'O\'yin sahifasi (Eski)',
+                    use: 'Robux sotib olish uchun',
+                    need: 'Virtual pul olish',
+                    rarity: 'ESKIRGAN: Boshqarish o\'zgargan'
+                }
+            ],
+            'Brawl Stars': [
+                {
+                    name: 'Brawl Box',
+                    emoji: '📦',
+                    location: 'Tokensini topish',
+                    use: 'Yangi Brawler va mo\'jizalar',
+                    need: 'Character kuchaytirish',
+                    rarity: 'UMUMIY: Muntazam topiladi'
+                },
+                {
+                    name: 'Legendary Brawler',
+                    emoji: '⭐',
+                    location: 'Brawl Box-dan (Kam ehtimol)',
+                    use: 'Eng kuchli personaj',
+                    need: 'O\'yinda ustunlik',
+                    rarity: 'JUDA NOYOB: 0.5% ehtimoli'
+                },
+                {
+                    name: 'Power-up',
+                    emoji: '💪',
+                    location: 'Match paytida',
+                    use: 'Vaqtincha kuch ko\'paytirish',
+                    need: 'Dushmanlarni yutish uchun',
+                    rarity: 'UMUMIY: Har matchda topiladi'
+                },
+                {
+                    name: 'Gadget',
+                    emoji: '🔧',
+                    location: 'Brawl Box',
+                    use: 'Maxsus qobiliyat',
+                    need: 'Strategy o\'zgarishi',
+                    rarity: 'NOYOB: Biror Brawler uchun'
+                },
+                {
+                    name: 'Star Power',
+                    emoji: '✨',
+                    location: 'Level 9+ Brawler',
+                    use: 'Ultra qobiliyat',
+                    need: 'Match yutish uchun',
+                    rarity: 'NOYOB: Biror Brawler uchun'
+                }
+            ],
+            'Grand Theft Auto': [
+                {
+                    name: 'AK-47',
+                    emoji: '🔫',
+                    location: 'Qurolxona va dushmanlar',
+                    use: 'Jangovar qurol',
+                    need: 'Dushmanlarni engish',
+                    rarity: 'UMUMIY: Ko\'p joyda'
+                },
+                {
+                    name: 'Lamborghini',
+                    emoji: '🏎️',
+                    location: 'Showroom va ko\'cha',
+                    use: 'Tezkor avtomobil',
+                    need: 'Tezlik va style',
+                    rarity: 'NOYOB: Qimmat'
+                },
+                {
+                    name: 'Money Stack',
+                    emoji: '💵',
+                    location: 'Mission paytida',
+                    use: 'O\'yin puli',
+                    need: 'Xarid-sotiq qilish',
+                    rarity: 'UMUMIY: Mission-dan'
+                },
+                {
+                    name: 'Jetpack',
+                    emoji: '🚀',
+                    location: 'Secret locatsiyalarda',
+                    use: 'Ucha olish',
+                    need: 'Atigi maxfiylashtirilgan',
+                    rarity: 'JUDA NOYOB: Easter egg'
+                },
+                {
+                    name: 'Gold Nugget',
+                    emoji: '🏅',
+                    location: 'Hid locatsiyalarda',
+                    use: 'Qimmat hediyelik',
+                    need: 'Yig\'ish uchun',
+                    rarity: 'NOYOB: Maxfiylashtirilgan'
+                }
+            ],
+            'Mobile Legends': [
+                {
+                    name: 'Mage Hero',
+                    emoji: '🔮',
+                    location: 'Hero selection',
+                    use: 'Magic qo\'llanish',
+                    need: 'Uzoq masofadan hujum',
+                    rarity: 'UMUMIY: Barcha herodan'
+                },
+                {
+                    name: 'Skin (Epic)',
+                    emoji: '👘',
+                    location: 'Shop-lar',
+                    use: 'Yangi ko\'rinish',
+                    need: 'Cosmetic o\'zgarishi',
+                    rarity: 'NOYOB: Pul bilan sotiladi'
+                },
+                {
+                    name: 'Crystal',
+                    emoji: '💎',
+                    location: 'In-game shop',
+                    use: 'Premium para',
+                    need: 'Skin va item sotib olish',
+                    rarity: 'XIS: Real pul bilan'
+                },
+                {
+                    name: 'Star Fragment',
+                    emoji: '⭐',
+                    location: 'Battle Pass',
+                    use: 'Level up item',
+                    need: 'Reward olish',
+                    rarity: 'NOYOB: Season-ga'
+                },
+                {
+                    name: 'Divine Blessing',
+                    emoji: '🙏',
+                    location: 'Lucky Draw',
+                    use: 'Maxsus efekt',
+                    need: 'Kamanda bujarrashida',
+                    rarity: 'JUDA NOYOB: Ayon'
+                }
+            ],
+            'Hayvanlar': [
+                {
+                    name: 'Sher',
+                    emoji: '🦁',
+                    location: 'Afrikalik steppalar',
+                    use: 'Aybash va predator',
+                    need: 'Ekilish uchun',
+                    rarity: 'NOYOB: Muqaddas hayvon'
+                },
+                {
+                    name: 'Bo\'ng\'aza',
+                    emoji: '🦎',
+                    location: 'Issiq mintaqalar',
+                    use: 'Insektlar yeysh',
+                    need: 'Ekosistem balansida',
+                    rarity: 'UMUMIY: Ko\'p turli'
+                },
+                {
+                    name: 'Qoq',
+                    emoji: '🦅',
+                    location: 'Tog\'lar va ormanlar',
+                    use: 'Ovchi kushow',
+                    need: 'Baliqlar yeysh',
+                    rarity: 'NOYOB: Muqaddas belgi'
+                },
+                {
+                    name: 'Changgi',
+                    emoji: '🐘',
+                    location: 'Afrikalik savannalari',
+                    use: 'Eng katta quruklik hayvoni',
+                    need: 'Gurdani buzish',
+                    rarity: 'NOYOB: Qayta tiklash kerak'
+                },
+                {
+                    name: 'Delfin',
+                    emoji: '🐬',
+                    location: 'Okeanlar va dengizlar',
+                    use: 'Aqliy va ijobiy',
+                    need: 'Suvda yashash',
+                    rarity: 'UMUMIY: Eng do\'stona'
+                }
+            ],
+            'O\'simliklar': [
+                {
+                    name: 'Ko\'karib',
+                    emoji: '🌲',
+                    location: 'Ormanlar va bog\'lar',
+                    use: 'Yog\'in to\'plash',
+                    need: 'Gaz qaytarish',
+                    rarity: 'UMUMIY: Ko\'p turli'
+                },
+                {
+                    name: 'Gul',
+                    emoji: '🌹',
+                    location: 'Bog\'lar va dalalar',
+                    use: 'Gulkari dekoratsiya',
+                    need: 'O\'t-cho\'pni ozuqa',
+                    rarity: 'UMUMIY: Barcha joyda'
+                },
+                {
+                    name: 'Mango',
+                    emoji: '🥭',
+                    location: 'Tropical mintaqalar',
+                    use: 'Mevalar o\'yin',
+                    need: 'Insektlar yutadi',
+                    rarity: 'UMUMIY: Sxirion mintaqa'
+                },
+                {
+                    name: 'Salsa',
+                    emoji: '🌶️',
+                    location: 'Bog\'lar va uylar',
+                    use: 'Taom ta\'tib',
+                    need: 'Achchiq chiroyli',
+                    rarity: 'UMUMIY: Oson ko\'cadirib'
+                },
+                {
+                    name: 'Shugli',
+                    emoji: '🌴',
+                    location: 'Qum sayollari',
+                    use: 'Soya beruvchi',
+                    need: 'Tropical ko\'rinish',
+                    rarity: 'UMUMIY: Issiq joylar'
+                }
+            ],
+            'Kiyimlar': [
+                {
+                    name: 'Ko\'ylak',
+                    emoji: '👗',
+                    location: 'Kiyim do\'koni',
+                    use: 'Ayollar uchun parda',
+                    need: 'Kuzatish va bezatish',
+                    rarity: 'UMUMIY: Har kuni'
+                },
+                {
+                    name: 'Futbolka',
+                    emoji: '👕',
+                    location: 'Kiyim do\'koni',
+                    use: 'Kundalik kiyim',
+                    need: 'Sovuqdan himoya',
+                    rarity: 'UMUMIY: Eng ko\'p ishlatiladi'
+                },
+                {
+                    name: 'Shlyapa',
+                    emoji: '🎩',
+                    location: 'Moda do\'koni',
+                    use: 'Bosh parda',
+                    need: 'Quyosh va style',
+                    rarity: 'UMUMIY: Quyosh sharoitida'
+                },
+                {
+                    name: 'Oyoq kiyim',
+                    emoji: '👟',
+                    location: 'Oyoq do\'koni',
+                    use: 'Oyoqni yopish',
+                    need: 'Harakatlantirish uchun',
+                    rarity: 'UMUMIY: Har kuni'
+                },
+                {
+                    name: 'Qo\'l qo\'lsosi',
+                    emoji: '🧣',
+                    location: 'Qish kiyim',
+                    use: 'Boyinni iliq qilish',
+                    need: 'Qish sovuqdan',
+                    rarity: 'UMUMIY: Qish faslida'
+                }
+            ],
+            'Suvlar': [
+                {
+                    name: 'Dengiz',
+                    emoji: '🌊',
+                    location: 'Kontinentlar orasida',
+                    use: 'Transport va taomlar',
+                    need: 'Hel va turizm',
+                    rarity: 'UMUMIY: Eng katta su',
+                    special: 'SHO\'RLI: Sho\'r suv'
+                },
+                {
+                    name: 'Daryo',
+                    emoji: '🏞️',
+                    location: 'Tog\'lar va dalalar',
+                    use: 'Ichimlik suvi',
+                    need: 'Asosiy ozuqa',
+                    rarity: 'UMUMIY: Barcha kontinentda'
+                },
+                {
+                    name: 'Ko\'l',
+                    emoji: '🏞️',
+                    location: 'Tekis joylarda',
+                    use: 'Baliq va su',
+                    need: 'Tabiat xazinasi',
+                    rarity: 'UMUMIY: Ko\'p bor'
+                },
+                {
+                    name: 'Yovvoyi suv',
+                    emoji: '💧',
+                    location: 'Yer ostida va tog\'da',
+                    use: 'Ichimlik va er suladish',
+                    need: 'Asosiy ozuqa',
+                    rarity: 'UMUMIY: Hamma joyda'
+                },
+                {
+                    name: 'Mus va qor',
+                    emoji: '❄️',
+                    location: 'Qutb va tog\'lar',
+                    use: 'Donib suv',
+                    need: 'Iqlim o\'zgarishi',
+                    rarity: 'UMUMIY: Qish mintaqada'
+                }
+            ],
+            'Gazlar': [
+                {
+                    name: 'Kislorod',
+                    emoji: '💨',
+                    location: 'Hava va suv',
+                    use: 'Nafas olish',
+                    need: 'Hayot uchun',
+                    rarity: 'UMUMIY: Eng zaruriy',
+                    special: 'ASOSIY: Barcha organizmlar uchun'
+                },
+                {
+                    name: 'Azot',
+                    emoji: '❄️',
+                    location: 'Atmosfera',
+                    use: 'O\'simlik ozuqasi',
+                    need: 'Erga ozuqa',
+                    rarity: 'UMUMIY: 78% hava'
+                },
+                {
+                    name: 'Ozon',
+                    emoji: '🌞',
+                    location: 'Yuqori atmosferada',
+                    use: 'UV himoya',
+                    need: 'Quyosh nuridan',
+                    rarity: 'UMUMIY: Stratosferada'
+                },
+                {
+                    name: 'Karbon dioksid',
+                    emoji: '🌍',
+                    location: 'Atmosfera',
+                    use: 'O\'simlik ozuqasi',
+                    need: 'Fotosintez uchun',
+                    rarity: 'UMUMIY: Iqlimda muhim'
+                },
+                {
+                    name: 'Vodo quruvchi',
+                    emoji: '🧊',
+                    location: 'Suv tahlilida',
+                    use: 'Suv buxorlashi',
+                    need: 'Meteorologiyada',
+                    rarity: 'UMUMIY: Tabiiy jarayonlar'
+                }
+            ]
+        };
+
+        let currentGame = 'PUBG';
+
+        // O'yinlarni o'rnatish
+        function initializeGames() {
+            const gamesList = document.getElementById('gamesList');
+            gamesList.innerHTML = games.map(game => `
+                <button class="game-item ${game.name === 'PUBG' ? 'active' : ''}" 
+                        onclick="selectGame('${game.name}')">
+                    ${game.icon} ${game.name}
+                </button>
+            `).join('');
+        }
+
+        // O'yin tanlash
+        function selectGame(gameName) {
+            currentGame = gameName;
+            
+            // Active tugmani o'zgartirah
+            document.querySelectorAll('.game-item').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.includes(gameName)) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Tab-larni yangilash
+            updateVideos();
+            updateShorts();
+            updateInfo();
+        }
+
+        // Videolarni yangilash
+        function updateVideos() {
+            const container = document.getElementById('videosContainer');
+            container.innerHTML = videos.map(video => `
+                <div class="video-card">
+                    <div class="video-thumbnail">${video.emoji}</div>
+                    <div class="video-info">
+                        <h3>${video.title}</h3>
+                        <p>${video.description}</p>
+                        <p style="color: #999;">⏱️ ${video.duration} | 👁️ ${video.views}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Shorts-larni yangilash
+        function updateShorts() {
+            const container = document.getElementById('shortsContainer');
+            container.innerHTML = shorts.map(short => `
+                <div class="short-card">
+                    <div class="short-thumbnail">${short.emoji}</div>
+                    <div class="short-info">
+                        <h4>${short.title}</h4>
+                        <p>⏱️ ${short.duration}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Ma'lumotlarni yangilash
+        function updateInfo() {
+            const container = document.getElementById('infoContainer');
+            const info = allInfo[currentGame] || [];
+            
+            container.innerHTML = info.map(item => `
+                <div class="info-card">
+                    <h4>${item.emoji} ${item.name}</h4>
+                    <p><strong>📍 Joylashuv:</strong> ${item.location}</p>
+                    <p><strong>🎯 Foydalanish:</strong> ${item.use}</p>
+                    <p><strong>❓ Nima uchun kerak:</strong> ${item.need}</p>
+                    <p><strong>⭐ Kamiyligim:</strong> ${item.rarity}</p>
+                    ${item.special ? `<div class="special-info">${item.special}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        // Tab almashtirish
+        function switchTab(tabName) {
+            // Barcha tab-contnet-ni yashirish
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Tanlangan tab-ni ko'rsatish
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Qidirish
+        function searchContent() {
+            const searchValue = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            if (!searchValue) {
+                alert('Iltimos qidiruv so\'zini kiriting!');
+                return;
+            }
+
+            // Qidiruv natijalarini filtrlash
+            let found = false;
+            const infoContainer = document.getElementById('infoContainer');
+            
+            // Barcha o'yinlardan qidirish
+            let results = [];
+            Object.keys(allInfo).forEach(game => {
+                allInfo[game].forEach(item => {
+                    if (item.name.toLowerCase().includes(searchValue) ||
+                        item.location.toLowerCase().includes(searchValue) ||
+                        item.use.toLowerCase().includes(searchValue)) {
+                        results.push({ game, item });
+                        found = true;
+                    }
+                });
+            });
+
+            if (found) {
+                infoContainer.innerHTML = results.map(result => `
+                    <div class="info-card">
+                        <h4>🎮 ${result.game}</h4>
+                        <h4>${result.item.emoji} ${result.item.name}</h4>
+                        <p><strong>📍 Joylashuv:</strong> ${result.item.location}</p>
+                        <p><strong>🎯 Foydalanish:</strong> ${result.item.use}</p>
+                        <p><strong>❓ Nima uchun kerak:</strong> ${result.item.need}</p>
+                        <p><strong>⭐ Kamiyligim:</strong> ${result.item.rarity}</p>
+                        ${result.item.special ? `<div class="special-info">${result.item.special}</div>` : ''}
+                    </div>
+                `).join('');
+                document.querySelector('[onclick="switchTab(\'info\')"]').click();
+            } else {
+                infoContainer.innerHTML = `<div class="no-data">❌ "${searchValue}" haqida ma'lumot topilmadi</div>`;
+                document.querySelector('[onclick="switchTab(\'info\')"]').click();
+            }
+        }
+
+        // Enter tugmasida qidirish
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchContent();
+                }
+            });
+
+            // Dasturni o'rnatish
+            initializeGames();
+            updateVideos();
+            updateShorts();
+            updateInfo();
+        });
+    </script>
+</body>
+</html>
